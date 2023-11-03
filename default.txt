@@ -1,0 +1,20 @@
+lidar1						-- 												success
+    ip						ip address  									success
+    port					communication port  							success
+    swversion       		software version								success
+
+lidar2						-- 												failed
+    ip						ip address  									success
+    port					communication port  							success
+    swversion       		software version								success
+
+gnss1						-- 												success
+    ip						ip address  									success
+    port					communication port  							success
+    swversion       		software version								success
+
+camera1						-- 												success
+    ip						ip address  									success
+    port					communication port  							success
+    swversion       		software version								success
+

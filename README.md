@@ -8,6 +8,10 @@
 
 ## Effecv Views
 
-![contents](./view/treeview_button.png)[QPushButton效果示意图]
++ QPushButton效果示意图
 
-![contents](./view/treeview_combox.png)[QCombox效果示意图]
+![QCombox效果示意图](./view/treeview_button.png) 
+
++ QCombox效果示意图
+
+![QCombox效果示意图](./view/treeview_combox.png) 

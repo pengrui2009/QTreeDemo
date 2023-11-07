@@ -53,6 +53,7 @@
 
 #include "ui_mainwindow.h"
 #include "qmytableviewbtndelegate.h"
+#include "qmytableviewcheckboxdelegate.h"
 
 #include <QMainWindow>
 
@@ -75,6 +76,7 @@ private slots:
 
 private:
     QMyTableViewBtnDelegate *m_btnDelegate;
+    QMyTableViewCheckboxDelegate *m_cbxDelegate;
 };
 
 #endif // MAINWINDOW_H

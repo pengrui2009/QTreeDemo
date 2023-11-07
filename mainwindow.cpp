@@ -55,12 +55,13 @@
 #include <QtDebug>
 #include <QMessageBox>
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setupUi(this);
 
-    const QStringList headers({tr("检测模块"), tr("检测项目"), tr("检测结果"), tr("操作")});
+    const QStringList headers({tr("检测模块"), tr("检测项目"), tr("检测结果"), tr("操作") , tr("通过")});
 
     QFile file(":/default.txt");
     file.open(QIODevice::ReadOnly);
@@ -89,9 +90,13 @@ MainWindow::MainWindow(QWidget *parent)
     // 必须要设置此项，否则样式表的hover无法生效
     view->setMouseTracking(true);
     // 构造函数中传入按钮列表即可添加任意个按钮
-    m_btnDelegate = new QMyTableViewBtnDelegate(QStringList()<<"编辑"<<"删除", this);
+    m_btnDelegate = new QMyTableViewBtnDelegate(QStringList()<<"检测", this);
     // 为指定列设置代理
     view->setItemDelegateForColumn(3, m_btnDelegate);
+
+    m_cbxDelegate = new QMyTableViewCheckboxDelegate(this);
+    view->setItemDelegateForColumn(4, m_cbxDelegate);
+
     // 连接信号槽，根据需要添加
     connect(m_btnDelegate, &QMyTableViewBtnDelegate::editData, this, [=](const QModelIndex &index){
         QMessageBox::information(this, "提示", QString("编辑第 %1 行数据").arg(index.row()+1));

@@ -94,14 +94,22 @@ MainWindow::MainWindow(QWidget *parent)
     // 为指定列设置代理
     view->setItemDelegateForColumn(3, m_btnDelegate);
 
-    m_cbxDelegate = new QMyTableViewCheckboxDelegate(this);
-    view->setItemDelegateForColumn(4, m_cbxDelegate);
-
     // 连接信号槽，根据需要添加
     connect(m_btnDelegate, &QMyTableViewBtnDelegate::editData, this, [=](const QModelIndex &index){
         QMessageBox::information(this, "提示", QString("编辑第 %1 行数据").arg(index.row()+1));
     });
     connect(m_btnDelegate, &QMyTableViewBtnDelegate::deleteData, this, [=](const QModelIndex &index){
+        QMessageBox::information(this, "提示", QString("删除第 %1 行数据").arg(index.row()+1));
+    });
+
+    m_cbxDelegate = new QMyTableViewCheckboxDelegate(this);
+    view->setItemDelegateForColumn(4, m_cbxDelegate);
+
+    // 连接信号槽，根据需要添加
+    connect(m_cbxDelegate, &QMyTableViewCheckboxDelegate::editData, this, [=](const QModelIndex &index){
+        QMessageBox::information(this, "提示", QString("编辑第 %1 行数据").arg(index.row()+1));
+    });
+    connect(m_cbxDelegate, &QMyTableViewCheckboxDelegate::deleteData, this, [=](const QModelIndex &index){
         QMessageBox::information(this, "提示", QString("删除第 %1 行数据").arg(index.row()+1));
     });
 

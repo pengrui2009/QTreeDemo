@@ -29,12 +29,43 @@ void QMyTableViewCheckboxDelegate::drawPushButton(QPainter* painter, const QStyl
     QStyleOptionButton styleOptBtn;
     styleOptBtn.rect = option.rect; // 设置按钮占据的矩形
     styleOptBtn.icon = qApp->style()->standardIcon(QStyle::SP_DesktopIcon); // 设置按钮图标
-    styleOptBtn.iconSize = QSize(32, 32);// 设置按钮图标尺寸
+//    styleOptBtn.iconSize = QSize(32, 32);// 设置按钮图标尺寸
     styleOptBtn.text = QString("button%1").arg(qsWndText);// 设置按钮标题
-    styleOptBtn.state = QStyle::State_Enabled | QStyle::State_Raised; // 设置按钮状态
+    styleOptBtn.state |= QStyle::State_Enabled; // 设置按钮状态
     styleOptBtn.direction = Qt::LeftToRight; // 设置按钮水平布局，如果改为Qt::RightToLeft，则按钮图标在按钮标题右侧。
-    styleOptBtn.features = QStyleOptionButton::None | QStyleOptionButton::Flat;// 设置按钮风格特点为普通扁平按钮
-    qApp->style()->drawControl(QStyle::CE_PushButton, &styleOptBtn, painter); // 绘制按钮
+//    styleOptBtn.features = QStyleOptionButton::None | QStyleOptionButton::Flat;// 设置按钮风格特点为普通扁平按钮
+//    qApp->style()->drawControl(QStyle::CE_PushButton, &styleOptBtn, painter); // 绘制按钮
+    if (styleOptBtn.rect.contains(m_mousePoint))
+    {
+        if (m_nType == 0)
+        {
+            styleOptBtn.state |= QStyle::State_MouseOver;
+        }
+        else if (m_nType == 1)
+        {
+            styleOptBtn.state |= QStyle::State_Sunken;
+        }
+    }
+
+    QPushButton pushBtn;
+    pushBtn.setStyleSheet("QPushButton{border-width: 0px;\
+                        position: absolute;\
+                        left: 0px;\
+                        top: 0px;\
+                        max-width: 80px;\
+                        width:80px;\
+                        height: 30px;\
+                        background: inherit;\
+                        background-color: rgba(255, 255, 255, 0);\
+                        border-width: 1px;\
+                        border-style: solid;\
+                        border-color: red;\
+                        border-radius: 10px;\
+                        font-size: 11px;\
+                        color: red;}\
+                        QPushButton:hover{background-color:red; color:#0000FF;}");
+    // 绘制按钮
+    pushBtn.style()->drawControl(QStyle::CE_PushButton, &styleOptBtn, painter, &pushBtn);
 }
 
 void QMyTableViewCheckboxDelegate::drawCheckBox(QPainter* painter, const QStyleOptionViewItem& option, const QString& qsWndText) const
@@ -86,6 +117,8 @@ void QMyTableViewCheckboxDelegate::paint(QPainter *painter, const QStyleOptionVi
     painter->drawRect(option.rect.adjusted(1, 1, -1, -1));
     painter->drawText(option.rect, Qt::AlignCenter, value.toString());
     painter->restore();
+
+    drawPushButton(painter, option, "上传报告");
 }
 
 QWidget *QMyTableViewCheckboxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -295,7 +328,7 @@ void QMyTableViewCheckboxDelegate::paint(QPainter *painter, const QStyleOptionVi
 }
 #endif
 
-#if 0
+
 // 响应按钮事件 - 划过、按下
 bool QMyTableViewCheckboxDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index)
 {
@@ -304,9 +337,7 @@ bool QMyTableViewCheckboxDelegate::editorEvent(QEvent* event, QAbstractItemModel
     QMouseEvent *pEvent = static_cast<QMouseEvent *> (event);
     m_mousePoint = pEvent->pos();
 
-    int nCount = m_btnNames.count();
-
-    int w = nCount != 0 ? option.rect.width() / nCount : 0;
+    int w = option.rect.width();
     if(w < 0) {
         qDebug()<<"ButtonDelegate btns 太多了！";
         return false;
@@ -315,14 +346,13 @@ bool QMyTableViewCheckboxDelegate::editorEvent(QEvent* event, QAbstractItemModel
     // 还原鼠标样式
     QApplication::restoreOverrideCursor();
 
-    for (int i = 0; i < nCount; ++i)
     {
         QStyleOptionButton button;
-        button.rect =  option.rect.adjusted(4 + i*w , 4, -(w * ( nCount - i -1 ) + 4)  , -4);
+        button.rect =  option.rect.adjusted(4 + w , 4, -(w  + 4)  , -4);
 
         // 鼠标位于按钮之上
         if (!button.rect.contains(m_mousePoint))
-            continue;
+            return true;
 
         bRepaint = true;
         switch (event->type())
@@ -335,7 +365,7 @@ bool QMyTableViewCheckboxDelegate::editorEvent(QEvent* event, QAbstractItemModel
 
             m_nType = 0;
 
-            QToolTip::showText(pEvent->globalPos(), m_btnNames.at(i));
+            QToolTip::showText(pEvent->globalPos(), "上传报告");
             break;
         }
         // 鼠标按下
@@ -347,7 +377,7 @@ bool QMyTableViewCheckboxDelegate::editorEvent(QEvent* event, QAbstractItemModel
         // 鼠标释放
         case QEvent::MouseButtonRelease:
         {
-            switch (i)
+            switch (0)
             {
             case 0:
             {
@@ -370,4 +400,4 @@ bool QMyTableViewCheckboxDelegate::editorEvent(QEvent* event, QAbstractItemModel
 
     return bRepaint;
 }
-#endif
+
